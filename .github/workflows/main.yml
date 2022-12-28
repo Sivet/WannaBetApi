@@ -1,41 +1,41 @@
-# name: Deploy WannaBetApi to Azure
-# on:
-#   push:
-#     branches:
-#       - main
+name: Deploy WannaBetApi to Azure
+on:
+  push:
+    branches:
+      - main
 
-# env:
-#   webAppPackagePath: './published'
-#   webAppname: 'WannaBetApi' #name of azure webapp
+env:
+  webAppPackagePath: './published'
+  webAppname: 'WannaBetApi' #name of azure webapp
 
-# jobs:
-#   build:
-#     runs-on: ubuntu-18.04 #upgrade?
-#     #env:
-#     #  working-directory: src/WannaBetApi
+jobs:
+  build:
+    runs-on: ubuntu-18.04 #upgrade?
+    #env:
+    #  working-directory: src/WannaBetApi
 
-#     steps:
-#     # checkout the repo
-#     - uses: actions/checkout@v3
+    steps:
+    # checkout the repo
+    - uses: actions/checkout@v3
 
-#     - name: Setup .NET Core
-#       uses: actions/setup-dotnet@v3
-#       with:
-#         dotnet-version: '6.0.x'
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '6.0.x'
     
-#     # dotnet build and publish
-#     - name: Install Dependencies
-#       run: dotnet restore WannaBetApi
-#     - name: Build
-#       run: dotnet build WannaBetApi --configuration Release --no-restore
-#     - name: Test
-#       run: dotnet test WannaBetApiTest --verbosity normal
-#     - name: Publish
-#       run: dotnet publish WannaBetApi --configuration Release --output ${{ env.webAppPackagePath }} 
-#     - name: 'Deploy to Azure using publish profile credentials'
-#       uses: azure/webapps-deploy@v1
-#       with: 
-#         app-name: ${{ env.webAppName }}
-#         publish-profile: ${{ secrets.azureWebAppPublishProfile }} 
-#         package: ${{ env.webAppPackagePath }} 
+    # dotnet build and publish
+    - name: Install Dependencies
+      run: dotnet restore WannaBetApi
+    - name: Build
+      run: dotnet build WannaBetApi --configuration Release --no-restore
+    - name: Test
+      run: dotnet test WannaBetApiTest --verbosity normal
+    - name: Publish
+      run: dotnet publish WannaBetApi --configuration Release --output ${{ env.webAppPackagePath }} 
+    - name: 'Deploy to Azure using publish profile credentials'
+      uses: azure/webapps-deploy@v1
+      with: 
+        app-name: ${{ env.webAppName }}
+        publish-profile: ${{ secrets.azureWebAppPublishProfile }} 
+        package: ${{ env.webAppPackagePath }} 
 
