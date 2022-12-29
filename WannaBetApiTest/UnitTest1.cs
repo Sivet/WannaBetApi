@@ -1,5 +1,5 @@
 using Xunit;
-using WannaBetApi;
+using WannaBetApi.Models;
 
 namespace WannaBetApiTest;
 

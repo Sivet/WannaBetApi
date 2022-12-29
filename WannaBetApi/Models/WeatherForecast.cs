@@ -1,4 +1,4 @@
-namespace WannaBetApi;
+namespace WannaBetApi.Models;
 
 public class WeatherForecast
 {

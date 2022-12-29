@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using WannaBetApi.Models;
 
 namespace WannaBetApi.Controllers;
 
