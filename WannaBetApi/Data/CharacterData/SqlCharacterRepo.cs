@@ -38,17 +38,14 @@ public class SqlCharacterRepo : ICharacterRepo
         return _context.Characters.FirstOrDefault(c => c.Id == id) ?? throw new ArgumentNullException("Character of Id " + id + " is not found");
     }
 
+    public void UpdateCharacter(Character character)
+    {
+        //Nothing
+        //AutoMapper maps onto the internal memory object so it is already updated.
+    }
+
     public bool SaveChanges()
     {
         return (_context.SaveChanges()) <= 0;
-    }
-
-    public void UpdateCharacter(Character character)
-    {
-        if (character == null)
-        {
-            throw new ArgumentNullException(nameof(character));
-        }
-        _context.Characters.Remove(character);
     }
 }
