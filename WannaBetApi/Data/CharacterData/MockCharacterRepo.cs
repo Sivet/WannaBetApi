@@ -11,6 +11,17 @@ public class MockCharacterRepo : ICharacterRepo
         new Character{Id=2, Name="Link", Class="Paladin", Role="Dps"},
         new Character{Id=3, Name="Neesh", Class="DeathKnight", Role="Tank"}
     };
+
+    public void CreateCharacter(Character character)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void DeleteCharacter(Character character)
+    {
+        throw new NotImplementedException();
+    }
+
     public IEnumerable<Character> GetAllCharacters()
     {
         return characters;
@@ -19,6 +30,16 @@ public class MockCharacterRepo : ICharacterRepo
     public Character GetCharacterById(int id)
     {
         return characters.FirstOrDefault(i => i.Id == id) ?? new Character { Id = id };
+    }
+
+    public bool SaveChanges()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void UpdateCharacter(Character character)
+    {
+        throw new NotImplementedException();
     }
 }
 
