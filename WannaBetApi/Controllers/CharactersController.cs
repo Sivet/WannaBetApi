@@ -1,8 +1,6 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using WannaBetApi.Data;
 using WannaBetApi.Dtos;
-using WannaBetApi.Models;
+using WannaBetApi.Services;
 
 namespace WannaBetApi.Controllers;
 
@@ -10,20 +8,17 @@ namespace WannaBetApi.Controllers;
 [Route("[controller]")]
 public class CharactersController : ControllerBase
 {
-    private readonly ICharacterRepo _repository;
-    private readonly IMapper _mapper;
+    private readonly CharacterService _service;
 
-    public CharactersController(ICharacterRepo repository, IMapper mapper)
+    public CharactersController(CharacterService service/*ICharacterRepo repository, IMapper mapper*/)
     {
-        _repository = repository;
-        _mapper = mapper;
+        _service = service;
     }
 
     [HttpGet]
     public ActionResult<IEnumerable<CharacterOutputDto>> GetAllCharacters()
     {
-        var characters = _repository.GetAllCharacters();
-        return Ok(_mapper.Map<IEnumerable<CharacterOutputDto>>(characters));
+        return Ok(_service.GetAllCharacters());
     }
 
     [HttpGet("{id}", Name = "GetCharacterById")] //Named so the post can use it. Should not be needed?
@@ -31,8 +26,7 @@ public class CharactersController : ControllerBase
     {
         try
         {
-            var character = _repository.GetCharacterById(id);
-            return Ok(_mapper.Map<CharacterOutputDto>(character));
+            return Ok(_service.GetCharacterById(id));
         }
         catch (Exception e)
         {
@@ -43,11 +37,7 @@ public class CharactersController : ControllerBase
     [HttpPost]
     public ActionResult<CharacterOutputDto> CreateCharacter(CharacterInputDto newCharacter)
     {
-        var characterModel = _mapper.Map<Character>(newCharacter);
-        _repository.CreateCharacter(characterModel);
-        _repository.SaveChanges();
-
-        var characterOutputDto = _mapper.Map<CharacterOutputDto>(characterModel);
+        var characterOutputDto = _service.CreateCharacter(newCharacter);
 
         return CreatedAtRoute(nameof(GetCharacterById), new { Id = characterOutputDto.Id }, characterOutputDto);
     }
@@ -55,35 +45,20 @@ public class CharactersController : ControllerBase
     [HttpPut("{id}")]
     public ActionResult UpdateCharacter(int id, CharacterInputDto inputCharacter)
     {
-        try
+        if (_service.UpdateCharacter(id, inputCharacter) == false)
         {
-            var currentCharacterModel = _repository.GetCharacterById(id);
-
-            _mapper.Map(inputCharacter, currentCharacterModel); //This updates the EF internal memory so no need for logic in the sql update
-            _repository.UpdateCharacter(currentCharacterModel); //Empty call
-            _repository.SaveChanges();
-            return NoContent();
+            return NotFound();
         }
-        catch (Exception e)
-        {
-            return NotFound(e.Message);
-        }
+        return NoContent();
     }
 
     [HttpDelete("{id}")]
     public ActionResult DeleteCharacter(int id)
     {
-        try
+        if (_service.DeleteCharacter(id) == false)
         {
-            var currentCharacterModel = _repository.GetCharacterById(id);
-
-            _repository.DeleteCharacter(currentCharacterModel);
-            _repository.SaveChanges();
-            return NoContent();
+            return NotFound();
         }
-        catch (Exception e)
-        {
-            return NotFound(e.Message);
-        }
+        return NoContent();
     }
 }
