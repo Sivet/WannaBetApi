@@ -1,10 +1,13 @@
 using Xunit;
 using WannaBetApi.Models;
+using NSubstitute;
 
 namespace WannaBetApiTest;
 
 public class UnitTest1
 {
+    private ILogger _logger = Substitute.For<ILogger>();
+    
     [Fact]
     public void Test1()
     {
